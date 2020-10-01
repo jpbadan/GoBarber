@@ -10,23 +10,19 @@ const usersRouter = Router();
 const upload = multer(uploadConfig);
 
 usersRouter.post('/', async (request, response) => {
-  try {
-    const { name, email, password } = request.body;
+  const { name, email, password } = request.body;
 
-    const createUser = new CreateUserService();
+  const createUser = new CreateUserService();
 
-    const user = await createUser.execute({
-      name,
-      email,
-      password,
-    });
+  const user = await createUser.execute({
+    name,
+    email,
+    password,
+  });
 
-    delete user.password;
+  delete user.password;
 
-    response.json(user);
-  } catch (err) {
-    return response.status(400).json({ error: err.message });
-  }
+  response.json(user);
 });
 
 usersRouter.patch(
@@ -35,20 +31,17 @@ usersRouter.patch(
   upload.single('avatar'),
   async (request, response) => {
     // console.log(request.file); -> Falta fazer a tratativa do arquivo de imagem -> nao deixar user fazer upload se n for imagem
-    try {
-      const updateUserAvatar = new UpdateUserAvatarService();
 
-      const user = await updateUserAvatar.execute({
-        user_id: request.user.id,
-        avatarFilename: request.file.filename,
-      });
+    const updateUserAvatar = new UpdateUserAvatarService();
 
-      delete user.password;
+    const user = await updateUserAvatar.execute({
+      user_id: request.user.id,
+      avatarFilename: request.file.filename,
+    });
 
-      return response.json(user);
-    } catch (err) {
-      return response.status(400).json({ error: err.message });
-    }
+    delete user.password;
+
+    return response.json(user);
   },
 ); // Patch pois estamos atualizando usando uma única info. Tbm usariamos para alteracao de senha por ex.
 
