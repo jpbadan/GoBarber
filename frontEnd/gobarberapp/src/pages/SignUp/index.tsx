@@ -1,6 +1,7 @@
-import React from 'react';
-import { FiLogIn, FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
+import React, { useCallback } from 'react';
+import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
 import { Form } from '@unform/web';
+import * as Yup from 'yup';
 
 import logoImg from '../../assets/logo.svg';
 
@@ -11,9 +12,25 @@ import { Container, Content, Background } from './styles';
 
 const SignUp: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/ban-types
-  function handleSubmit(data: object): void {
-    console.log(data);
-  }
+  const handleSubmit = useCallback(async (data: object) => {
+    try {
+      // Validacao de dados com yup para validar objetos inteiros
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Nome Obrigatório'),
+        email: Yup.string()
+          .required('E-Mail Obrigatório')
+          .email('Digite um E-Mail Válido'),
+        password: Yup.string().min(6, 'Deve conter no mínimo 6 caracteres'),
+      });
+
+      await schema.validate(data, {
+        // Evita que o Yup pare de rodar apos o primeiro erro:
+        abortEarly: false,
+      });
+    } catch (err) {
+      console.log('SignUp:React.FC -> err', err);
+    }
+  }, []);
 
   return (
     <Container>

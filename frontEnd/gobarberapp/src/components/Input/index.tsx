@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
 
   const { fieldName, defaultValue, error, registerField } = useField(name);
 
-  // Usar useCallback todas as vezes que se for criar uma função em um component
+  // Usar useCallback todas as vezes que se for criar uma função em um component que se renderiza
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);
   }, []);
