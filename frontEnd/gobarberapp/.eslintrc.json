@@ -30,10 +30,11 @@
     ],
     "rules": {
       // // note you must disable the base rule as it can report incorrect errors
-      // "no-unused-vars": "off",
-      // "@typescript-eslint/no-unused-vars": ["error"],
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["warn"],
       
       // "no-use-before-define": "off",
+      "no-unused-expressions": "off",
       "camelcase": "off",
       "prettier/prettier": "error",
       "react/jsx-props-no-spreading": "off",

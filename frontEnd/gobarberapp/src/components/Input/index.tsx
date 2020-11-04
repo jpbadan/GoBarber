@@ -6,8 +6,12 @@ import React, {
   useCallback,
 } from 'react';
 import { IconBaseProps } from 'react-icons';
+import { FiAlertCircle } from 'react-icons/fi';
 import { useField } from '@unform/core';
-import { Container } from './styles';
+
+import Tooltip from '../Tooltip';
+
+import { Container, Error } from './styles';
 
 // Permite que o nosso componente Input receba por default todos os parametros de um input HTML
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -51,7 +55,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   }, [fieldName, registerField]);
 
   return (
-    <Container isFilled={isFilled} isFocused={isFocused}>
+    <Container inError={!!error} isFilled={isFilled} isFocused={isFocused}>
       {Icon && <Icon size={20} />}
       {/* Se o Icon existir -> <Icon size={20} /> */}
       <input
@@ -61,6 +65,11 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
         ref={inputRef}
         {...rest}
       />
+      {error && (
+        <Error title={error}>
+          <FiAlertCircle color="#c53030" size={20} />
+        </Error>
+      )}
     </Container>
   );
 };
