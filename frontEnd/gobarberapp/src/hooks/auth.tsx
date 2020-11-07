@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 
 import api from '../services/api';
 
@@ -17,12 +17,11 @@ interface AuthContextData {
   // eslint-disable-next-line @typescript-eslint/ban-types
   user: object;
   signIn(credentials: SignInCredentials): Promise<void>;
+  signOut(): void;
 }
 
 // Uma info que deve ser acessivel de varios locais. {} as AuthContext -> Hack para burlar as tipagens do TS:
-export const AuthContext = createContext<AuthContextData>(
-  {} as AuthContextData,
-);
+const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 // Criação de metodos acessiveis atraves do context:
 export const AuthProvider: React.FC = ({ children }) => {
@@ -50,9 +49,27 @@ export const AuthProvider: React.FC = ({ children }) => {
     setData({ token, user }); // O useState ja foi rodado anteriormente
   }, []);
 
+  const signOut = useCallback(() => {
+    localStorage.removeItem('@GoBaber:token');
+    localStorage.removeItem('@GoBaber:user');
+
+    setData({} as AuthState);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn }}>
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+export function useAuth(): AuthContextData {
+  // Permite refatorar useContext(AuthContext) -> useAuth()
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+
+  return context;
+}
