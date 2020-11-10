@@ -29,9 +29,15 @@
         "prettier"
     ],
     "rules": {
-      // // note you must disable the base rule as it can report incorrect errors
+      // note you must disable the base rule as it can report incorrect errors
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": ["warn"],
+      "@typescript-eslint/ban-types":["warn"],
+
+      // // Resolve problema de false positive para interfaces em TS
+      // "no-unused-vars": "off",
+      // "@typescript-eslint/no-unused-vars": "off",
+      // "@typescript-eslint/no-unused-vars-experimental": "error",
       
       // "no-use-before-define": "off",
       "no-unused-expressions": "off",
