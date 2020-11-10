@@ -2,17 +2,20 @@
 import 'reflect-metadata';
 
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import 'express-async-errors'; // Permite tratativa de erros assíncronos.
 // DEVE SER IMPORTADA LOGO APÓS A IMPORTAÇÃO DO EXPRESS.
 
-import routes from './routes';
-import './database/index'; // Apenas carrega o arquivo -> n contem exports
-import uploadConfig from './config/upload';
-import AppError from './errors/AppError';
+import uploadConfig from '@config/upload';
+import AppError from '@shared/errors/AppError';
+import routes from '@shared/infra/http/routes';
+
+import '@shared/infra/typeorm'; // Apenas carrega o arquivo database -> n contem exports
 
 const app = express();
 const port = 3333;
 
+app.use(cors()); // Evita que sites nao autenticados tenham acessos à api (ver docs). Só é necessário para requisições feitas atravez de browsers. Native e insomnia n usam o cors.
 app.use(express.json());
 app.use('/files', express.static(uploadConfig.directory)); // Permite servir uma pasta estática pelo express
 app.use(routes);
@@ -34,5 +37,5 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
 });
 
 app.listen(port, () => {
-  console.log(`🐓🐓🐓 Server started on port ${port}`);
+  console.log(`🐓 GREAT SUCCESS! Server started on ${port}`);
 });

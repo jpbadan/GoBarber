@@ -9,7 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import User from './User';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 @Entity('appointments') // Decorator Typescript -> Relaciona o model e o banco de dados
 class Appointment {
