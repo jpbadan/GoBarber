@@ -11,6 +11,7 @@ import AppError from '@shared/errors/AppError';
 import routes from '@shared/infra/http/routes';
 
 import '@shared/infra/typeorm'; // Apenas carrega o arquivo database -> n contem exports
+import '@shared/container';
 
 const app = express();
 const port = 3333;
@@ -23,10 +24,9 @@ app.use(routes);
 // Tratativa de erros: Middlewares para tttiva de erros teem 4 parametros. Variaveis _ n sao usadas -> Config personalizada eslint
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {
-    return response.status(err.statusCode).json({
-      status: 'error',
-      message: err.message,
-    });
+    return response
+      .status(err.statusCode)
+      .json({ status: 'error', message: err.message });
   }
 
   console.error(err);

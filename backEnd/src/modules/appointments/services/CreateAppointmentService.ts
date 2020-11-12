@@ -1,35 +1,32 @@
 /* eslint-disable camelcase */
 import { startOfHour } from 'date-fns';
-import { getCustomRepository } from 'typeorm';
+import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
+// import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
+import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 
-interface RequestDTO {
+interface IRequest {
   provider_id: string;
   date: Date;
 }
 
+// Services normalmente têm um unico método e apenas isso. São bem especificos
+@injectable()
 class CreateAppointmentService {
-  // // Services teem um unico método e apenas isso. São bem especificos
-  // private appointmentsRepository: AppointmentsRepository;
+  // Ao definir private nos parametros de um constructor, automaticamente essa variável é criada.
+  constructor(
+    @inject('AppointmentsRepository')
+    private appointmentsRepository: IAppointmentsRepository,
+  ) {}
 
-  // constructor(appointmentsRepository: AppointmentsRepository) {
-  //   this.appointmentsRepository = appointmentsRepository;
-  // }
-
-  public async execute({
-    date,
-    provider_id,
-  }: RequestDTO): Promise<Appointment> {
-    const appointmentsRepository = getCustomRepository(AppointmentsRepository);
-
+  public async execute({ date, provider_id }: IRequest): Promise<Appointment> {
     // converte as horas para horas cheias
     const appointmentDate = startOfHour(date);
 
-    const findAppointmentsInSameDate = await appointmentsRepository.findByDate(
+    const findAppointmentsInSameDate = await this.appointmentsRepository.findByDate(
       appointmentDate,
     );
 
@@ -37,12 +34,10 @@ class CreateAppointmentService {
       throw new AppError('Appointment already booked!');
     }
 
-    const appointment = await appointmentsRepository.create({
+    const appointment = await this.appointmentsRepository.create({
       provider_id,
       date: appointmentDate,
     });
-
-    // await appointmentsRepository.save(appointment);
 
     return appointment;
   }
