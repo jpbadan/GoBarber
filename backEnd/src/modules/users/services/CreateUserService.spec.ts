@@ -40,9 +40,9 @@ describe('CreateUser', () => {
 
     expect(
       createUser.execute({
-        name: 'Rodrigo Ferreira',
+        name: 'Rodrigo Mamede',
         email: 'Rodrigo@gmail.com',
-        password: 'Rod123456',
+        password: 'Med123456',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
