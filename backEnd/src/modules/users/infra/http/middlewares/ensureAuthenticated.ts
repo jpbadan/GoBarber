@@ -29,7 +29,7 @@ export default function ensureAuthenticated(
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 
-    // <as> Quando precisar forçar o tipo de uma var podemos usar esse hack to TS:
+    // 'as' Quando precisar forçar o tipo de uma var podemos usar esse hack to TS:
     const { sub } = decoded as TokenPayload;
 
     // Disponibilizamos o id do usuarios nas props da rota:

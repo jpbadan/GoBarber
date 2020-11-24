@@ -22,7 +22,7 @@ describe('CreateUser', () => {
       password: 'Rod123456',
     });
 
-    expect(user).toHaveProperty('id');
+    await expect(user).toHaveProperty('id');
   });
 
   it('Should not be able to create an new user using a already used email', async () => {
@@ -32,7 +32,7 @@ describe('CreateUser', () => {
       password: 'Rod123456',
     });
 
-    expect(
+    await expect(
       createUser.execute({
         name: 'Rodrigo Mamede',
         email: 'Rodrigo@gmail.com',
