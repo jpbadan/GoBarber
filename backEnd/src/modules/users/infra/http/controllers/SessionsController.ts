@@ -21,6 +21,6 @@ export default class SessionsController {
       'Logged in. Very Nice!',
     );
 
-    response.json({ user, token });
+    return response.json({ user, token });
   }
 }
