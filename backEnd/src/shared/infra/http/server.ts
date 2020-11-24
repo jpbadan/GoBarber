@@ -18,7 +18,7 @@ const port = 3333;
 
 app.use(cors()); // Evita que sites nao autenticados tenham acessos à api (ver docs). Só é necessário para requisições feitas atravez de browsers. Native e insomnia n usam o cors.
 app.use(express.json());
-app.use('/files', express.static(uploadConfig.tmpFolder)); // Permite servir uma pasta estática pelo express
+app.use('/files', express.static(uploadConfig.uploadsFolder)); // Permite servir uma pasta estática pelo express
 app.use(routes);
 
 // Tratativa de erros: Middlewares para tttiva de erros teem 4 parametros. Variaveis _ n sao usadas -> Config personalizada eslint
